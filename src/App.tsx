@@ -3,6 +3,7 @@ import Grid from "./components/Grid";
 import "./App.scss";
 import { generate } from "random-words";
 import ConfettiExplosion from "react-confetti-explosion";
+import { Analytics } from "@vercel/analytics/react";
 
 import Modal from "react-modal";
 import "./components/Cell.scss";
@@ -318,6 +319,7 @@ const App: React.FC = () => {
       <footer className="App-footer">
         <p>© {new Date().getFullYear()} Mike Renwick. All rights reserved.</p>
       </footer>
+      <Analytics />
     </div>
   );
 };

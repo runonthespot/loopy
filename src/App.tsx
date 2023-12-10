@@ -80,7 +80,7 @@ const App: React.FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   const [moves, setMoves] = useState(0);
-  const [gridSize, setGridSize] = useState(5);
+  const [gridSize, setGridSize] = useState(4);
   const [gameKey, setGameKey] = useState(0);
   useEffect(() => {
     document.documentElement.style.setProperty(

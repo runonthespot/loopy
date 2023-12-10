@@ -1,7 +1,7 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(5, 55px); // 5 columns, each 60px wide
-  grid-template-rows: repeat(5, 55px); // 5 rows, each 60px high
+  grid-template-columns: repeat(var(--grid-size), 55px);
+  grid-template-rows: repeat(var(--grid-size), 55px);
   gap: 5px; // Space between cells
   justify-content: center; // Center grid horizontally
   align-items: center; // Center grid vertically

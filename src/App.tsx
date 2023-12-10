@@ -3,7 +3,6 @@ import Grid from "./components/Grid";
 import "./App.scss";
 import { generate } from "random-words";
 import ConfettiExplosion from "react-confetti-explosion";
-import logo from "./logo.png";
 
 import Modal from "react-modal";
 import "./components/Cell.scss";
@@ -36,27 +35,32 @@ const confettiConfig = {
   colors: ["#000", "#333", "#666"],
 };
 
-const Timer: React.FC<{ hasWon: boolean }> = ({ hasWon }) => {
+const Timer: React.FC<{ hasWon: boolean; resetTimer: number }> = ({
+  hasWon,
+  resetTimer,
+}) => {
   const [seconds, setSeconds] = useState(0);
   const [formattedTime, setFormattedTime] = useState("00:00");
 
   useEffect(() => {
+    setSeconds(0); // reset seconds when resetTimer changes
     if (hasWon) {
       return;
     }
     const interval = setInterval(() => {
-      setSeconds((seconds) => seconds + 1);
+      setSeconds((seconds) => {
+        const newSeconds = seconds + 1;
+        let minutes = Math.floor(newSeconds / 60);
+        let formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        let formattedSeconds =
+          newSeconds % 60 < 10 ? `0${newSeconds % 60}` : newSeconds % 60;
+        setFormattedTime(`${formattedMinutes}:${formattedSeconds}`);
+        return newSeconds;
+      });
     }, 1000);
 
-    let minutes = Math.floor(seconds / 60);
-    //produce nicely formatted time with leading zeros
-    let formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    let formattedSeconds =
-      seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60;
-    setFormattedTime(`${formattedMinutes}:${formattedSeconds}`);
-
     return () => clearInterval(interval);
-  }, [hasWon, seconds]);
+  }, [hasWon, resetTimer]); // add resetTimer as a dependency
 
   return (
     <div className="timer-container">
@@ -70,12 +74,33 @@ const Timer: React.FC<{ hasWon: boolean }> = ({ hasWon }) => {
 };
 
 const App: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+  const [resetTimer, setResetTimer] = useState(0); // add new state variable
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   const [moves, setMoves] = useState(0);
+  const [gridSize, setGridSize] = useState(5);
+  const [gameKey, setGameKey] = useState(0);
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--grid-size",
+      gridSize.toString()
+    );
+
+    setLoading(true);
+    const newGrid = generateRandomGrid();
+    setInitialGrid(newGrid);
+    setGrid(shuffleGrid(newGrid));
+    setLoading(false);
+  }, [gridSize, gameKey]);
 
   const generateRandomGrid = () => {
-    const words = generate({ exactly: 5, minLength: 5, maxLength: 5 });
+    const words = generate({
+      exactly: gridSize,
+      minLength: gridSize,
+      maxLength: gridSize,
+    });
     return words.map((word) => word.toUpperCase().split(""));
   };
 
@@ -83,6 +108,20 @@ const App: React.FC = () => {
     generateRandomGrid()
   );
   console.log("initialGrid", initialGrid);
+
+  const startNewGame = (newGridSize: number) => {
+    if (
+      window.confirm(
+        `Are you sure you want to start a new ${newGridSize}x${newGridSize} game?`
+      )
+    ) {
+      setGridSize(newGridSize);
+      setGameKey(gameKey + 1);
+      setHasWon(false);
+      setMoves(0);
+      setResetTimer(resetTimer + 1); // increment resetTimer to reset the timer
+    }
+  };
 
   const [grid, setGrid] = useState(shuffleGrid(initialGrid));
 
@@ -153,25 +192,43 @@ const App: React.FC = () => {
           style={{ width: "20%", height: "auto", margin: "20px" }}
         />
 
-        <button
-          className="instruction-button"
-          onClick={() => setModalIsOpen(true)}
-        >
-          Open Instructions
-        </button>
+        <div className="flex-container">
+          <button
+            className="instruction-button"
+            onClick={() => startNewGame(4)}
+          >
+            New 4x4 game
+          </button>
+          <button
+            className="instruction-button"
+            onClick={() => startNewGame(5)}
+          >
+            New 5x5 game
+          </button>
+          <button
+            className="instruction-button"
+            onClick={() => setModalIsOpen(true)}
+          >
+            Instructions
+          </button>
+        </div>
+
         {hasWon && <ConfettiExplosion />}
       </header>
-
-      <Grid
-        originalGrid={initialGrid}
-        initialGrid={grid}
-        setInitialGrid={setGrid}
-        setHasWon={setHasWon}
-        setMoves={setMoves}
-        draggingPosition={draggingPosition}
-        cellSize={60}
-      />
-      <Timer hasWon={hasWon} />
+      {!loading && (
+        <Grid
+          key={gameKey}
+          gridSize={gridSize}
+          originalGrid={initialGrid}
+          initialGrid={grid}
+          setInitialGrid={setGrid}
+          setHasWon={setHasWon}
+          setMoves={setMoves}
+          draggingPosition={draggingPosition}
+          cellSize={60}
+        />
+      )}
+      <Timer hasWon={hasWon} resetTimer={resetTimer} />
       <div className="moves-container">
         <h2>
           Moves

@@ -42,6 +42,7 @@
 }
 .instruction-button {
   position: relative;
+  width: 150px;
   bottom: 10px;
   margin: 1rem 1rem;
   padding: 0.5rem 1rem;
@@ -60,6 +61,24 @@
 .instruction-text-cell {
   font-size: 1.2rem;
   margin: 1rem 1rem;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; // This will add space between the buttons
+
+  .instruction-button {
+    padding: 10px 20px; // This will increase the size of the buttons
+    margin: 5px; // This will add some space around the buttons
+    border-radius: 5px; // This will make the buttons rounded
+    transition: background-color 0.3s ease; // This will make the hover effect smooth
+
+    &:hover {
+      background-color: #ddd; // This will change the button color when hovered
+    }
+  }
 }
 
 .App-header {

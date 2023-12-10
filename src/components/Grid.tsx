@@ -1,10 +1,11 @@
 // src/components/Grid.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useGesture } from "react-use-gesture";
 import Cell from "./Cell";
 import "./Grid.scss";
 
 interface GridProps {
+  gridSize: number;
   originalGrid: string[][];
   initialGrid: string[][];
   setMoves: React.Dispatch<React.SetStateAction<number>>;
@@ -65,6 +66,7 @@ const Grid: React.FC<GridProps> = ({
   setHasWon,
   setMoves,
   cellSize,
+  gridSize,
 }) => {
   const [grid, setGrid] = useState(initialGrid);
 
@@ -75,13 +77,25 @@ const Grid: React.FC<GridProps> = ({
     distance: 0,
   });
 
+  useEffect(() => {
+    setGrid(initialGrid);
+  }, [initialGrid]);
+
   const bind = useGesture({
     onDrag: ({
       args: [rowIndex, colIndex],
       movement: [mx, my],
       initial: [ix, iy],
       memo,
+      event,
     }) => {
+      // Prevent the default behavior of the browser
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      if (event.cancelable) {
+        event.preventDefault();
+      }
       // Determine the direction based on the initial drag
       let direction: "row" | "column" =
         Math.abs(mx) > Math.abs(my) ? "row" : "column";
@@ -185,9 +199,16 @@ const Grid: React.FC<GridProps> = ({
   });
 
   const getCellColor = (rowIndex: number, colIndex: number) => {
-    if (grid[rowIndex][colIndex] === originalGrid[rowIndex][colIndex]) {
+    if (
+      rowIndex < originalGrid.length &&
+      colIndex < originalGrid[0].length &&
+      grid[rowIndex][colIndex] === originalGrid[rowIndex][colIndex]
+    ) {
       return "green";
-    } else if (originalGrid[rowIndex].includes(grid[rowIndex][colIndex])) {
+    } else if (
+      rowIndex < originalGrid.length &&
+      originalGrid[rowIndex].includes(grid[rowIndex][colIndex])
+    ) {
       return "yellow";
     } else {
       return "white";

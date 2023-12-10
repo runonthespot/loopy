@@ -7,6 +7,10 @@ import ConfettiExplosion from "react-confetti-explosion";
 import Modal from "react-modal";
 import "./components/Cell.scss";
 
+import ReactGA from "react-ga";
+
+ReactGA.initialize("G-CRL69RDTKD");
+
 const shuffleGrid = (inputGrid: string[][]) => {
   const flatGrid = inputGrid.flat();
   for (let i = flatGrid.length - 1; i > 0; i--) {
@@ -82,6 +86,11 @@ const App: React.FC = () => {
   const [moves, setMoves] = useState(0);
   const [gridSize, setGridSize] = useState(4);
   const [gameKey, setGameKey] = useState(0);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--grid-size",

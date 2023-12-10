@@ -210,8 +210,7 @@ const App: React.FC = () => {
           <div className="flex-container">
             <div className="cell cell-white">W</div>
             <p className="instruction-text-cell">
-              White cells indicate a letter in the correct column, but wrong
-              row.
+              White cells indicate a letter in the wrong column and wrong row.
             </p>
           </div>
         </div>
@@ -286,6 +285,9 @@ const App: React.FC = () => {
           </button>
         </div>
       )}
+      <footer className="App-footer">
+        <p>© {new Date().getFullYear()} Mike Renwick. All rights reserved.</p>
+      </footer>
     </div>
   );
 };

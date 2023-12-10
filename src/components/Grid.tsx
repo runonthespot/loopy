@@ -90,12 +90,8 @@ const Grid: React.FC<GridProps> = ({
       event,
     }) => {
       // Prevent the default behavior of the browser
-      if (event.cancelable) {
-        event.preventDefault();
-      }
-      if (event.cancelable) {
-        event.preventDefault();
-      }
+
+      event.preventDefault();
       // Determine the direction based on the initial drag
       let direction: "row" | "column" =
         Math.abs(mx) > Math.abs(my) ? "row" : "column";

@@ -105,6 +105,15 @@ const App: React.FC = () => {
   }, [gridSize, gameKey]);
 
   useEffect(() => {
+    if (hasWon) {
+      ReactGA.event({
+        category: "Game",
+        action: "Won",
+      });
+    }
+  }, [hasWon]);
+
+  useEffect(() => {
     function preventPullToRefresh(element: any) {
       let prevent = false;
 
@@ -167,6 +176,17 @@ const App: React.FC = () => {
       setHasWon(false);
       setMoves(0);
       setResetTimer(resetTimer + 1); // increment resetTimer to reset the timer
+    }
+    if (newGridSize === 4) {
+      ReactGA.event({
+        category: "Game",
+        action: "Started_four_times_four",
+      });
+    } else {
+      ReactGA.event({
+        category: "Game",
+        action: "Started_five_times_five",
+      });
     }
   };
 

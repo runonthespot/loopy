@@ -10,6 +10,7 @@ import "./components/Cell.scss";
 import ReactGA from "react-ga";
 
 ReactGA.initialize("G-CRL69RDTKD");
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const shuffleGrid = (inputGrid: string[][]) => {
   const flatGrid = inputGrid.flat();

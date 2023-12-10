@@ -197,13 +197,13 @@ const App: React.FC = () => {
             className="instruction-button"
             onClick={() => startNewGame(4)}
           >
-            New 4x4 game
+            New 4x4
           </button>
           <button
             className="instruction-button"
             onClick={() => startNewGame(5)}
           >
-            New 5x5 game
+            New 5x5
           </button>
           <button
             className="instruction-button"

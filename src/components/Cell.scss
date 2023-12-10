@@ -1,0 +1,47 @@
+.cell {
+  // Dimensions
+  width: 55px;
+  height: 55px;
+  min-width: 55px;
+  min-height: 55px;
+  box-sizing: border-box;
+  // Flexbox
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // Text Styling
+  font-size: 20px; // Bigger text
+  font-weight: bold; // Bolder text
+
+  border: 3px solid #ddd; // Lighter border color
+  border-radius: 5px; // Rounded corners
+  // Styling
+
+  cursor: pointer; // Makes the cursor appear as a pointer
+  background-color: #f9f9f9; // Light background color
+  transition: background-color 0.6s ease; // Smooth transition effect
+
+  // User select
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard syntax */
+
+  // Hover effect
+  &:hover {
+    background-color: #f0f0f0; // Slightly darker on hover
+  }
+}
+
+.cell-yellow {
+  background-color: #ffeb3b; // Yellow background color
+}
+
+.cell-green {
+  background-color: #4caf50; // Green background color
+}
+
+.cell-white {
+  background-color: #f9f9f9; // White background color
+}

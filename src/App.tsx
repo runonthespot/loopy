@@ -95,6 +95,44 @@ const App: React.FC = () => {
     setLoading(false);
   }, [gridSize, gameKey]);
 
+  useEffect(() => {
+    function preventPullToRefresh(element: any) {
+      let prevent = false;
+
+      element.addEventListener("touchstart", function (e: any) {
+        if (e.touches.length !== 1) {
+          return;
+        }
+
+        const scrollY =
+          window.pageYOffset ||
+          document.body.scrollTop ||
+          document.documentElement.scrollTop;
+        prevent = scrollY === 0;
+      });
+
+      element.addEventListener("touchmove", function (e: any) {
+        if (prevent) {
+          prevent = false;
+          e.preventDefault();
+        }
+      });
+    }
+
+    const element = document.querySelector(".App"); // replace '.App' with the selector of the element you want to prevent pull to refresh on
+    if (element) {
+      preventPullToRefresh(element);
+    }
+
+    // cleanup function
+    return () => {
+      if (element) {
+        element.removeEventListener("touchstart", preventPullToRefresh);
+        element.removeEventListener("touchmove", preventPullToRefresh);
+      }
+    };
+  }, []); // empty dependency array means this effect runs once on mount and cleanup on unmount
+
   const generateRandomGrid = () => {
     const words = generate({
       exactly: gridSize,
